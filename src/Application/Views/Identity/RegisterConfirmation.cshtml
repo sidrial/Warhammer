@@ -1,0 +1,12 @@
+﻿@{
+    Layout = "_IdentityLayout";
+    ViewData["Title"] = "Registration confirmed";
+}
+
+
+<div class="card-body p-4">
+    <h2>@ViewData["Title"]</h2>
+    <p>
+        @Html.Raw(Warhammer.Application.Resources.Identity.RegisterConfirmation) <br> <br>  <a asp-action="Login">@Warhammer.Application.Resources.Identity.ClickHereToLogIn</a>.
+    </p>
+</div>

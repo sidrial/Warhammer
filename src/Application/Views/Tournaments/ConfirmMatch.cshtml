@@ -1,0 +1,68 @@
+﻿@model Warhammer.Application.Models.TournamentViewModels.ConfirmMatchViewModel
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong style="line-height: 2.5em; font-size: 14px">MATCH RESULTS</strong>
+                    <span style="line-height: 2.5em; font-size: 14px">&nbsp;&nbsp;&nbsp; @Model.ConfirmCount / 2 confirmed</span>
+                </div>
+                <form asp-controller="Tournaments" asp-action="ConfirmMatch" method="post">
+                    @Html.HiddenFor(m => m.TournamentId)
+                    @Html.HiddenFor(m => m.ConfirmCount)
+                    @Html.HiddenFor(m => m.PinLabel)
+                    @Html.HiddenFor(m => m.Player1)
+                    @Html.HiddenFor(m => m.Player2)
+                    <div>
+                        <input type="hidden" data-val="true" asp-for="MatchId" value="@Model.MatchId">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <span asp-validation-for="Player1VictoryPoints" class="text-danger"></span>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span asp-label-for="" class="input-group-text">@Model.Player1</span>
+                                            </div>
+                                            <input class="form-control" type="number" data-val="true" asp-for="Player1VictoryPoints" autofocus="autofocus">
+
+                                        </div>
+                                    </div>
+                                    <br/>
+
+                                    <div class="form-group">
+                                        <span asp-validation-for="Player2VictoryPoints" class="text-danger"></span>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">@Model.Player2</span>
+                                            </div>
+                                            <input class="form-control" type="number" data-val="true" asp-for="Player2VictoryPoints" autofocus="autofocus">
+                                        </div>
+                                    </div>
+                                    <br/>
+
+                                    <div class="form-group">
+                                        <span asp-validation-for="PinNumber" class="text-danger"></span>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">@Model.PinLabel</span>
+                                            </div>
+                                            <input class="form-control" type="number" data-val="true" asp-for="PinNumber" autofocus="autofocus">
+                                        </div>
+                                    </div>
+                                    <br/>
+                                </div>
+
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Opslaan</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

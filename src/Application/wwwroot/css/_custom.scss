@@ -1,0 +1,14 @@
+// Here you can add other styles
+
+@media only screen and (min-width: 601px) {
+    .custombackground {
+        background-image: url('/img/KillTeam101-July14-Battleshot27dr.jpg');
+        background-size: contain;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .custombackground {
+        background-image: url('/img/phonecover.jpg');
+    }
+}

@@ -1,0 +1,24 @@
+﻿@model Warhammer.Application.Models.TournamentViewModels.CreatePlayerViewModel
+<form asp-controller="Tournaments" asp-action="CreateRound" method="post">
+    @Html.HiddenFor(m => m.TournamentId);
+
+    <div class="modal fade" id="createRoundModal" tabindex="-1" role="dialog" aria-labelledby="createRoundModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="matchModalLabel">Add round</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Weet je zeker dat je een nieuw ronde wilt toevoegen?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Warhammer.Application.Resources.Global.Close</button>
+                    <button type="submit" class="btn btn-primary">@Warhammer.Application.Resources.Global.Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

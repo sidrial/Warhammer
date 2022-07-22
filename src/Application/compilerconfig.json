@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/style.css",
+    "inputFile": "wwwroot/css/style.scss",
+    "minify": {
+      "enabled": true
+    },
+    "includeInProject": true,
+    "options":{
+      "sourceMap": false,
+      "includePath": "wwwroot"
+    }
+  }
+]

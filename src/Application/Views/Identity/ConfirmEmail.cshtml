@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = @Warhammer.Application.Resources.Identity.ConfirmEmail;
+    Layout = "_IdentityLayout";
+}
+
+<div class="card-body p-4">
+<h2>@ViewData["Title"]</h2>
+<div>
+    <p>
+        @Warhammer.Application.Resources.Identity.ThankYouForConfirmingYourEmail
+    </p>
+    <a href="@Url.Action("Login")" class="btn btn-primary px-4" role="button">Log in</a>
+</div>
+</div>

@@ -1,0 +1,39 @@
+﻿@using Warhammer.Application.Models.MatchViewModels
+@model CreateMatchViewModel
+@section JavascriptLoadLast {
+    <script src="~/ts/Matches.js"></script>
+}
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong style="line-height: 2.5em; font-size: 14px">MATCHES</strong>
+
+                    @if (Model is not null)
+                    {
+                        <span class="pull-right btn btn-primary" data-toggle="modal" data-target="#matchModal">Add match result</span>
+                    }
+                </div>
+                <div class="card-body">
+                    <table id="matches" class="table table-sm table-responsive-sm table-hover table-outline" style="width:100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Datum</th>
+                                <th>Winnaar (VP)</th>
+                                <th>Verliezer (VP)</th>
+                                <th>Rating</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("~/Views/Matches/_Create.cshtml", Model).ConfigureAwait(false)
+

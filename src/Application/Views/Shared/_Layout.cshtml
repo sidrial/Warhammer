@@ -1,0 +1,99 @@
+﻿@using Warhammer.Domain.Users.Entities
+@using Warhammer.Domain.Tournaments
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>De Dobbelsteen | 40k Groep</title>
+    <link rel="icon" type="image/png" href="/img/favicon.ico" />
+    <!-- Icons-->
+    <link href="/modules/@("@coreui")/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="/modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="/css/style.css" rel="stylesheet">
+    
+    <link href="/modules/datatables/datatables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.dataTables.min.css" rel="stylesheet" />
+
+    
+    @RenderSection("HeadContent", false)
+</head>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+    <header class="app-header navbar">
+        <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">
+            <img class="navbar-brand-full" src="~/img/logo.png" width="106" alt="Dobbelsteen Logo">
+            <img class="navbar-brand-minimized" src="~/img/favicon.ico" width="25" height="25" alt="Dobbelsteen Logo">
+        </a>
+        <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="nav navbar-nav ml-auto">
+          
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <img class="img-avatar" alt="" title="Gravatar for @User.Identity.Name" src="https://www.gravatar.com/avatar/sadfjioasdiojas?s=40&d=mp">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-header text-center">
+                            <strong>@Warhammer.Application.Resources.Global.Account</strong>
+                        </div>
+                    @if (User?.Identity?.Name != null)
+                    {
+                        <a class="dropdown-item" href="@Url.Action("ChangePassword", "Identity")">
+                            <i class="fa fa-lock"></i> @Warhammer.Application.Resources.Identity.ChangePassword
+                        </a>
+                        <a class="dropdown-item" href="@Url.Action("Logout", "Identity")">
+                            <i class="fa fa-sign-out"></i> @Warhammer.Application.Resources.Global.Logout
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="dropdown-item" href="@Url.Action("Login", "Identity")">
+                            <i class="fa fa-sign-in"></i> @Warhammer.Application.Resources.Global.Login
+                        </a>
+                        <a class="dropdown-item" href="@Url.Action("Register", "Identity")">
+                            <i class="fa fa-user-plus"></i> @Warhammer.Application.Resources.Global.Register
+                        </a>
+                    }
+                    </div>
+                </li>
+        </ul>
+    </header>
+    <div class="app-body">
+        <div class="sidebar">
+            <partial name="_SideMenu" />
+        </div>
+        <main class="main custombackground">
+            <div class="container-fluid" style="padding: 30px;">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+    <!-- Core and necessary plugins-->
+    <script src="/modules/jquery/dist/jquery.min.js"></script>
+    <script src="/modules/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="/modules/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="/modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+    <script src="/modules/@("@coreui")/coreui/dist/js/coreui.min.js"></script>
+    <script src="~/modules/clipboard/clipboard.min.js"></script>
+    <!-- Plugins and scripts required by this view-->
+
+    <script src="/modules/@("@coreui")/coreui-plugin-chartjs-custom-tooltips/dist/js/custom-tooltips.min.js"></script>
+<script src="/modules/datatables/datatables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    
+    @RenderSection("JavascriptLoadLast", false)
+    </body>
+</html>

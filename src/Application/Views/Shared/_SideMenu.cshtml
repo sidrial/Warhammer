@@ -1,0 +1,50 @@
+﻿@using System.Security.Claims
+@using Warhammer.Domain.Tournaments
+@using Warhammer.Domain.Users.Constants
+@inject ITournamentRepo TournamentRepo;
+
+@{
+    var tournaments = await TournamentRepo.GetTournamentsAsync();
+}
+
+<nav class="sidebar-nav">
+    <ul class="nav">
+        <br />
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index", "Home")">
+                <i class="nav-icon icon-home"></i> Nieuws
+            </a>
+        </li>
+        <li class="nav-title">LADDER</li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index", "Players")">
+                <i class="nav-icon icon-people"></i> Spelers
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index", "Matches")">
+                <i class="nav-icon icon-fire"></i> Matches
+            </a>
+        </li>
+        <li class="nav-title">TOERNOOIEN</li>
+        @foreach (var tournament in tournaments)
+        {
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index", "Tournaments", new { id = tournament.Id })">
+                <i class="nav-icon icon-trophy"></i> @Html.Raw(tournament.Name)
+            </a>
+        </li>
+        }
+        @if (User.HasClaim(claim => claim.Type == ClaimTypes.Role && claim.Value == Claims.Admin))
+        {
+            <li class="nav-title">ADMIN</li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "User")">
+                    <i class="nav-icon icon-user-follow"></i> @Warhammer.Application.Resources.Global.Users
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+<button class="sidebar-minimizer brand-minimizer" type="button"></button>

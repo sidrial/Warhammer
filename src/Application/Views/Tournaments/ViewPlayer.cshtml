@@ -1,0 +1,78 @@
+﻿@using System.Security.Claims
+@using Warhammer.Domain.Users.Constants
+@model Warhammer.Application.Models.TournamentViewModels.ViewPlayerViewModel
+
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <strong style="line-height: 2.5em; font-size: 14px">Info voor @Model.PlayerName</strong>
+                </div>
+                <div>
+                    <div class="modal-body">
+                        <div>Speler: @Model.PlayerName</div>
+                        @if (Model.IsArmyVisible)
+                        {
+                            <div>Faction: @Model.PrimaryFaction</div>
+                            <div class="card-footer"><code>@Html.Raw(Model.ArmyList?.Replace("\r\n", "<br/>"))</code></div>
+                        }
+                        <br />
+                        @if (Model.UpdatePlayerPossible)
+                        {
+                            <div>
+                                @Html.ActionLink("Upload army-list", "UpdatePlayer", "Tournaments", new {  playerId = Model.PlayerId, tournamentId = Model.TournamentId }, new { @class = "btn btn-primary btn-large" })
+                            </div>
+                        }
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (User.HasClaim(claim => claim.Type == ClaimTypes.Role && claim.Value == Claims.Admin))
+{
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-controller="Tournaments" asp-action="ViewPlayer" method="post">
+                    <input id="playerid" asp-for="PlayerId" type="hidden" />
+                    <input id="tournamentid" asp-for="TournamentId" type="hidden" />
+                    <div class="card">
+                        <div class="card-header">
+                            <strong style="line-height: 2.5em; font-size: 14px">Admin</strong>
+                        </div>
+                        <div class="card-body">
+                            <div>Pin: @Model.Secret</div>
+                            <br />
+                            <div class="mb-3 row">
+                                <label class="col-md-3 col-form-label" asp-for="ExtraPointsListDeadline">Extra points for list deadline</label>
+                                <div class="col-md-9 input-group">
+                                    <input asp-for="ExtraPointsListDeadline" class="mt-2" type="checkbox" />
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-md-3 col-form-label" asp-for="ExtraPointsListValid">Extra points for list validity</label>
+                                <div class="col-md-9 input-group">
+                                    <input asp-for="ExtraPointsListValid" class="mt-2" type="checkbox" />
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label class="col-md-3 col-form-label" asp-for="ExtraPointsListPainted">Extra points for list painted</label>
+                                <div class="col-md-9 input-group">
+                                    <input asp-for="ExtraPointsListPainted" class="mt-2" type="number" />
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">Submit extra points</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+}

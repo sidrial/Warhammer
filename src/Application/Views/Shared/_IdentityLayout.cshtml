@@ -1,0 +1,35 @@
+﻿@using Warhammer.Domain.Users.Entities
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<html>
+<head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>De Dobbelsteen</title>
+    <link rel="icon" type="image/png" href="/img/favicon.ico" />
+    <!-- Icons-->
+    <link href="/modules/@("@coreui")/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="/modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="/css/style.css" rel="stylesheet">
+    
+</head>
+<body class="gray-bg app flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="text-center px-3 pb-4">
+                    <img src="/img/logo.png" width="250" />
+                </div>
+                <div class="card mx-4">
+                        @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

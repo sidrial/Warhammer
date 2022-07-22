@@ -1,0 +1,49 @@
+﻿@model Warhammer.Application.Models.MatchViewModels.CreateMatchViewModel
+
+<form asp-controller="Matches" asp-action="Create" method="post">
+    <div class="modal fade" id="matchModal" tabindex="-1" role="dialog" aria-labelledby="matchModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="matchModalLabel">New match</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select asp-for="WinnerId" asp-items="Model.PlayerSelectList" class="form-control">
+                            <option value="">Select Winner</option>
+                        </select>
+
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Victory points</span>
+                                </div>
+                                <input class="form-control" placeholder="Victory points" type="number" data-val="true" asp-for="WinnerVictoryPoints" autofocus="autofocus">
+                            </div>
+                        </div>
+                        <br/>
+                        <select asp-for="LoserId" asp-items="Model.PlayerSelectList" class="form-control">
+                            <option value="">Select Loser</option>
+                        </select>
+
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Victory points</span>
+                                </div>
+                                <input class="form-control" placeholder="Victory points" type="number" data-val="true" asp-for="LoserVictoryPoints" autofocus="autofocus">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Warhammer.Application.Resources.Global.Close</button>
+                    <button type="submit" class="btn btn-primary">@Warhammer.Application.Resources.Global.Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,58 @@
+﻿@model Warhammer.Application.Models.TournamentViewModels.CreatePlayerViewModel
+
+<form asp-controller="Tournaments" asp-action="CreatePlayer" method="post">
+    <div class="modal fade" id="createPlayerModal" tabindex="-1" role="dialog" aria-labelledby="createPlayerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="matchModalLabel">New player</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @Html.HiddenFor(m => m.TournamentId)
+
+                    <div class="form-group">
+                        <div class="form-group">
+                            <span asp-validation-for="PlayerName" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Name</span>
+                                </div>
+                                <input class="form-control" type="text" data-val="true" asp-for="PlayerName" autofocus="autofocus">
+                            </div>
+                        </div>
+                        <br/>
+
+                        <div class="form-group">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Email</span>
+                                </div>
+                                <input class="form-control" type="text" data-val="true" asp-for="Email" autofocus="autofocus">
+                            </div>
+                        </div>
+                        <br/>
+
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Club</span>
+                                </div>
+                                <input class="form-control" type="text" data-val="true" asp-for="Club" autofocus="autofocus">
+                            </div>
+                        </div>
+                        <br/>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Warhammer.Application.Resources.Global.Close</button>
+                    <button type="submit" class="btn btn-primary">@Warhammer.Application.Resources.Global.Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
