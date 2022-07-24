@@ -99,9 +99,22 @@ public class TournamentsController : BaseController
 		var player = tournament.Players.Single(player => player.Id == viewPlayerViewModel.PlayerId);
 
 		player.SetExtraPoints(viewPlayerViewModel.ExtraPointsListDeadline, viewPlayerViewModel.ExtraPointsListValid, viewPlayerViewModel.ExtraPointsListPainted);
+		player.Rename(viewPlayerViewModel.PlayerName);
 		await this.TournamentRepo.UpdateTournamentAsync(tournament);
 
 		return this.RedirectToAction(nameof(this.ViewPlayer), new { playerId = player.Id, tournamentId = tournament.Id });
+	}
+
+	[HttpPost("delete_player")]
+	public async Task<ActionResult> DeletePlayer(ViewPlayerViewModel viewPlayerViewModel)
+	{
+		var tournament = await this.TournamentRepo.GetTournamentAsync(viewPlayerViewModel.TournamentId);
+		var player = tournament.Players.Single(player => player.Id == viewPlayerViewModel.PlayerId);
+		tournament.Players.Remove(player);
+
+		await this.TournamentRepo.UpdateTournamentAsync(tournament);
+
+		return this.RedirectToAction(nameof(this.Index), new { id = viewPlayerViewModel.TournamentId });
 	}
 
 	[HttpGet("update_player")]
@@ -126,7 +139,7 @@ public class TournamentsController : BaseController
 		await this.TournamentRepo.UpdateTournamentAsync(tournament);
 		return this.RedirectToAction(nameof(this.ViewPlayer), new { playerId = updatedPlayer.PlayerId, tournamentId = updatedPlayer.TournamentId });
 	}
-
+	
 	[HttpPost("create_round")]
 	[Authorize]
 	public async Task<ActionResult> CreateRound(CreatePlayerViewModel createPlayerViewModel)
@@ -134,6 +147,18 @@ public class TournamentsController : BaseController
 		var tournament = await this.TournamentRepo.GetTournamentAsync(createPlayerViewModel.TournamentId);
 		tournament.AddNextRound();
 		
+		await this.TournamentRepo.UpdateTournamentAsync(tournament);
+
+		return this.RedirectToAction(nameof(this.Index), new { id = createPlayerViewModel.TournamentId });
+	}
+
+	[HttpPost("recreate_round")]
+	[Authorize]
+	public async Task<ActionResult> RecreateLastRound(CreatePlayerViewModel createPlayerViewModel)
+	{
+		var tournament = await this.TournamentRepo.GetTournamentAsync(createPlayerViewModel.TournamentId);
+		tournament.ShuffleLatestPairing();
+
 		await this.TournamentRepo.UpdateTournamentAsync(tournament);
 
 		return this.RedirectToAction(nameof(this.Index), new { id = createPlayerViewModel.TournamentId });

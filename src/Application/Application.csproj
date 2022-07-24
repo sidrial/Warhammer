@@ -84,6 +84,12 @@
     <Content Update="Views\Tournaments\ConfirmMatch.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Tournaments\_RecreateRound.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Tournaments\_DeletePlayer.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Tournaments\_CreateRound.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

@@ -138,6 +138,27 @@ public class Tournament
 		this.Rounds.Add(round);
 	}
 
+	public void ShuffleLatestPairing()
+	{
+		if (this.Status == TournamentStatus.Finished)
+		{
+			throw new ValidationException($"Can not shuffle pairing of last round for {nameof(Tournament)} with status {nameof(TournamentStatus.Finished)}.");
+		}
+
+		var lastRound = this.Rounds.Last();
+		if (lastRound.Matches.Any(match => match.Status != MatchStatus.Created))
+		{
+			throw new ValidationException($"Can not shuffle pairing of last round when matches have begun.");
+		}
+
+		// Validation is ok, remove last round and create a new one.
+		this.Rounds.Remove(lastRound);
+		var roundNumber = 1 + (uint)this.Rounds.Count;
+		var upcomingMatches = this.GetNextRoundMatches().ToList();
+		var round = new Round(this.Id, roundNumber, upcomingMatches);
+		this.Rounds.Add(round);
+	}
+
 	private IEnumerable<Match> GetNextRoundMatches()
 	{
 		var previousPairings = this.Rounds

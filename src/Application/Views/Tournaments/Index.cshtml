@@ -33,7 +33,7 @@
                                     default:
                                         throw new ArgumentOutOfRangeException();
                                 }
-                                <a class="pull-right btn btn-primary" href="@Url.Action("NextTournamentStatus", new { id = Model.Id })">@buttonTitle</a> 
+                                <a class="pull-right btn btn-primary" href="@Url.Action("NextTournamentStatus", new { id = Model.Id })">@buttonTitle</a>
                             }
                         </div>
                     }
@@ -56,75 +56,82 @@
                             <div class="card-body">
                                 <table id="merchants" class="table table-sm table-hover table-outline mb-0">
                                     <thead class="thead-light">
-                                    <tr>
-                                        <th>Rank</th>
-                                        <th>Speler</th>
-                                        <th>Score</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Speler</th>
+                                            <th>Score</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    @for (int i = 0; i < Model.Players.Count; i++)
-                                    {
-                                        <tr>
-                                            <td>@(i + 1)</td>
-                                            <td>@Html.ActionLink(Model.Players[i].Name, "ViewPlayer", new { playerId = Model.Players[i].Id, tournamentId = Model.Id  })</td>
-                                            <td>@Model.Players[i].CalculatedPlayerScore</td>
-                                        </tr>
-                                    }
+                                        @for (int i = 0; i < Model.Players.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>@(i + 1)</td>
+                                                <td>@Html.ActionLink(Model.Players[i].Name, "ViewPlayer", new { playerId = Model.Players[i].Id, tournamentId = Model.Id  })</td>
+                                                <td>@Model.Players[i].CalculatedPlayerScore</td>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
-                                <br/>
-                            @if (User.HasClaim(claim => claim.Type == ClaimTypes.Role && claim.Value == Claims.Admin))
-                            {
-                                @if (Model.Status == TournamentStatus.Created || Model.Status == TournamentStatus.PendingPlayerReview)
+                                <br />
+                                @if (User.HasClaim(claim => claim.Type == ClaimTypes.Role && claim.Value == Claims.Admin))
                                 {
-                                    <span class="pull-left btn btn-primary" data-toggle="modal" data-target="#createPlayerModal">Add player</span>
+                                    @if (Model.Status == TournamentStatus.Created || Model.Status == TournamentStatus.PendingPlayerReview)
+                                    {
+                                        <span class="pull-left btn btn-primary" data-toggle="modal" data-target="#createPlayerModal">Add player</span>
+                                    }
+                                    @if (Model.Status == TournamentStatus.RoundsStarted)
+                                    {
+                                        if ((!Model.Rounds.Any() || Model.Rounds.LastOrDefault()?.Matches.All(match => match.Status == MatchStatus.Confirmed) == true) && Model.Rounds.Count < Model.Length)
+                                        {
+                                            <span class="pull-right btn btn-primary" data-toggle="modal" data-target="#createRoundModal">Start new round</span>
+                                        }
+                                        if (Model.Rounds.LastOrDefault()?.Matches.All(match => match.Status == MatchStatus.Created) == true)
+                                        {
+                                            <span class="pull-right btn btn-primary" data-toggle="modal" data-target="#recreateRoundModal">Recreate new pairings</span>
+                                        }
+                                    }
                                 }
-                                @if (Model.Status == TournamentStatus.RoundsStarted &&
-                                     (!Model.Rounds.Any() || Model.Rounds.LastOrDefault()?.Matches.All(match => match.Status == MatchStatus.Confirmed) == true) && Model.Rounds.Count < Model.Length)
-                                {
-                                    <span class="pull-right btn btn-primary" data-toggle="modal" data-target="#createRoundModal">Start new round</span>
-                                }
-                            }
                             </div>
                         </dl>
                     </div>
                     @foreach (var round in Model.Rounds)
                     {
                         <div class="tab-pane fade" id="round_@round.Number" role="tabpanel" aria-labelledby="round_@round.Number-tab">
-                        <dl class="row">
-                            <div class="card-body">
-                                <table id="table_@round.Number" class="table table-sm table-hover table-outline mb-0">
-                                    <thead class="thead-light">
-                                    <tr>
-                                        <th>Tafel</th>
-                                        <th>Speler 1</th>
-                                        <th>Speler 2</th>
-                                        <th>Score</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @for (int i = 0; i < round.Matches.Count; i++)
-                                    {
-                                        <tr>
-                                            <td>@(i + 1)</td>
-                                            <td>@round.Matches[i].Player1.Name</td>
-                                            <td>@round.Matches[i].Player2.Name</td>
-                                            <td>@round.Matches[i].Player1VictoryPoints - @round.Matches[i].Player2VictoryPoints</td>
-                                            <td>@if (round.Matches[i].Status != MatchStatus.Confirmed || User.HasClaim(claim => claim.Type == ClaimTypes.Role && claim.Value == Claims.Admin))
-                                                {
-                                                    <span>@Html.ActionLink("Confirm match score", "ConfirmMatch", new { matchId = round.Matches[i].Id, tournamentId = Model.Id })</span>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                    </tbody>
-                                </table>
-                             
-                            </div>
-                        </dl>
-                    </div>
+                            <dl class="row">
+                                <div class="card-body">
+                                    <table id="table_@round.Number" class="table table-sm table-hover table-outline mb-0">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Tafel</th>
+                                                <th>Speler 1</th>
+                                                <th>Speler 2</th>
+                                                <th>Score</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < round.Matches.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td>@(i + 1)</td>
+                                                    <td>@round.Matches[i].Player1.Name</td>
+                                                    <td>@round.Matches[i].Player2.Name</td>
+                                                    <td>@round.Matches[i].Player1VictoryPoints - @round.Matches[i].Player2VictoryPoints</td>
+                                                    <td>
+                                                        @if (round.Matches[i].Status != MatchStatus.Confirmed || User.HasClaim(claim => claim.Type == ClaimTypes.Role && claim.Value == Claims.Admin))
+                                                        {
+                                                            <span>@Html.ActionLink("Confirm match score", "ConfirmMatch", new { matchId = round.Matches[i].Id, tournamentId = Model.Id })</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </dl>
+                        </div>
                     }
                 </div>
             </div>
@@ -135,3 +142,4 @@
 
 @await Html.PartialAsync("~/Views/Tournaments/_CreatePlayer.cshtml", new CreatePlayerViewModel(Model.Id)).ConfigureAwait(false)
 @await Html.PartialAsync("~/Views/Tournaments/_CreateRound.cshtml", new CreatePlayerViewModel(Model.Id)).ConfigureAwait(false)
+@await Html.PartialAsync("~/Views/Tournaments/_RecreateRound.cshtml", new CreatePlayerViewModel(Model.Id)).ConfigureAwait(false)

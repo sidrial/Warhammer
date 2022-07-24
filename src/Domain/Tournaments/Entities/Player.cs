@@ -81,6 +81,11 @@ namespace Warhammer.Domain.Tournaments.Entities
             this.ExtraPointsListPainted = extraPointsListPainted;
         }
 
+        public void Rename(string name)
+        {
+	        this.Name = name;
+        }
+
         public override string ToString() => this.Name;
 
         public override bool Equals(object other)
