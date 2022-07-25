@@ -20,12 +20,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddMvc();
+
 // DI (repos)
 const string databaseName = "Warhammer";
 var cosmosClient = InitializeCosmos();
 builder.Services.AddSingleton<ITournamentRepo>(InitializeTournamentRepo(cosmosClient, "Tournament"));
 builder.Services.AddSingleton<IUserRepo>(InitializeUserRepo(cosmosClient, "User"));
 builder.Services.AddSingleton<ILadderRepo>(InitializeLadderRepo(cosmosClient, "Ladder"));
+
+#if DEBUG // Got a free account, so got to abuse the production database with test-containers.
+builder.Services.AddSingleton<ITournamentRepo>(InitializeTournamentRepo(cosmosClient, "TestTournament"));
+builder.Services.AddSingleton<IUserRepo>(InitializeUserRepo(cosmosClient, "TestUser"));
+builder.Services.AddSingleton<ILadderRepo>(InitializeLadderRepo(cosmosClient, "TestLadder"));
+#endif
 
 // Identity framework
 builder.Services.AddTransient<IUserStore<User>, UserStore>();
@@ -60,6 +67,9 @@ builder.Services.AddAuthorization(options =>
 
 // Add application services.
 builder.Services.AddSingleton<IEmailSender>(InitializeMailer());
+#if DEBUG
+builder.Services.AddSingleton<IEmailSender>(new DummyEmailSender("dummy@mailer.nl"));
+#endif
 builder.Services.AddTransient<IPasswordGenerator, PasswordGenerator>();
 
 var app = builder.Build();
