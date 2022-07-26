@@ -73,6 +73,8 @@ namespace Warhammer.Application.Models.TournamentViewModels
             this.PlayerName = player.Name;
             this.Club = player.Club;
             this.TournamentId = player.TournamentId;
+            this.ArmyList = player.List;
+            this.PrimaryFaction = player.Faction;
         }
     }
 }

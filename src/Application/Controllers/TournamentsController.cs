@@ -81,13 +81,13 @@ public class TournamentsController : BaseController
 	[HttpGet("view_player")]
 	public async Task<ActionResult> ViewPlayer(string playerId, string tournamentId)
 	{
+		var isAdmin = this.User.HasClaim(claim => claim.Type == ClaimTypes.Role && claim.Value == Claims.Admin);
 		var tournament = await this.TournamentRepo.GetTournamentAsync(tournamentId);
 		var player = tournament.Players.Single(player => player.Id == playerId);
 
-		var isArmyListVisible =  this.User.HasClaim(claim => claim.Type == ClaimTypes.Role && claim.Value == Claims.Admin) || 
-		                         tournament.Status != TournamentStatus.Created;
+		var isArmyListVisible = isAdmin || tournament.Status != TournamentStatus.Created;
+		var updatePlayerPossible = isAdmin || tournament.Status == TournamentStatus.Created;
 
-		var updatePlayerPossible = tournament.Status == TournamentStatus.Created;
 		var viewModel = new ViewPlayerViewModel(player, isArmyListVisible, updatePlayerPossible);
 		return this.View(viewModel);
 	}
@@ -131,13 +131,15 @@ public class TournamentsController : BaseController
 		var tournament = await this.TournamentRepo.GetTournamentAsync(updatedPlayer.TournamentId);
 		var player = tournament.Players.Single(player => player.Id == updatedPlayer.PlayerId);
 
-		if (tournament.Status != TournamentStatus.Created) return this.RedirectToAction(nameof(this.ViewPlayer), new { playerId = player.Id, tournamentId = tournament.Id });
+		if (player.CanUpdatePlayerList(tournament.Status, updatedPlayer.PinNumber, this.User.HasClaim(claim => claim.Type == ClaimTypes.Role && claim.Value == Claims.Admin)))
+		{ 
+			player.UpdatePlayerList(updatedPlayer.Club, updatedPlayer.PrimaryFaction, updatedPlayer.ArmyList);
+			await this.TournamentRepo.UpdateTournamentAsync(tournament);
+			return this.RedirectToAction(nameof(this.ViewPlayer), new { playerId = updatedPlayer.PlayerId, tournamentId = updatedPlayer.TournamentId });
+		}
 
-		if (player.Pin != updatedPlayer.PinNumber) return this.RedirectToAction(nameof(this.UpdatePlayer), new { playerId = updatedPlayer.PlayerId, tournamentId = updatedPlayer.TournamentId });
-
-		player.Update(updatedPlayer.Club, updatedPlayer.PrimaryFaction, updatedPlayer.ArmyList);
-		await this.TournamentRepo.UpdateTournamentAsync(tournament);
-		return this.RedirectToAction(nameof(this.ViewPlayer), new { playerId = updatedPlayer.PlayerId, tournamentId = updatedPlayer.TournamentId });
+		this.ModelState.AddModelError(nameof(ConfirmMatchViewModel.PinNumber), "Invalid PIN.");
+		return this.View(updatedPlayer);		
 	}
 	
 	[HttpPost("create_round")]

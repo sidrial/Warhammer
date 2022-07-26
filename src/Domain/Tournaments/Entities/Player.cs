@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Architect.Identities;
 using Newtonsoft.Json;
+using Warhammer.Domain.Tournaments.Enums;
 using Warhammer.Domain.Tournaments.ValueObjects;
 
 namespace Warhammer.Domain.Tournaments.Entities
@@ -67,12 +69,31 @@ namespace Warhammer.Domain.Tournaments.Entities
             this.Pin = new Pin((uint)rnd.Next(1000, 9999));
         }
 
-        public void Update(string club, string faction, string list)
+        /// <summary>
+        /// User can update player if they're the player, or they have admin rights.
+        /// </summary>
+        public bool CanUpdatePlayerList(TournamentStatus tournamentStatus, uint loggingPinNumber, bool isAdmin)
         {
+            // Admins can always confirm matches
+            if (isAdmin) return true;
+
+            // If PIN is correct and tournament status is still on created. 
+            if (tournamentStatus != TournamentStatus.Created) return false;
+            return this.Pin == loggingPinNumber;
+        }
+
+        /// <summary>
+        /// Updates the player list, CanUpdatePlayerList() validates if user is allowed.
+        /// </summary>
+        /// <param name="club"></param>
+        /// <param name="faction"></param>
+        /// <param name="list"></param>
+        public void UpdatePlayerList(string club, string faction, string list)
+        {          
             this.Club = club;
             this.Faction = faction;
             this.List = list;
-        }
+        }     
 
         public void SetExtraPoints(bool extraPointsListDeadline, bool extraPointsListValid, ushort extraPointsListPainted)
         {
