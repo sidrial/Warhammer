@@ -67,7 +67,7 @@
                                         {
                                             <tr>
                                                 <td>@(i + 1)</td>
-                                                <td>@Html.ActionLink(Model.Players[i].Name, "ViewPlayer", new { playerId = Model.Players[i].Id, tournamentId = Model.Id  })</td>
+                                                <td>@Html.ActionLink(Model.Players[i].Name, "ViewPlayer", new { playerId = Model.Players[i].Id, tournamentId = Model.Id  }) @if(!string.IsNullOrWhiteSpace(Model.Players[i].List)){ <span class="icon-check"></span>}</td>
                                                 <td>@Model.Players[i].CalculatedPlayerScore</td>
                                             </tr>
                                         }
